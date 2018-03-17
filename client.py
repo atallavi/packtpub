@@ -1,3 +1,10 @@
+'''
+Simple python application for web scratching. It obtains the title and description of free books at:
+    https://www.packtpub.com/packt/offers/free-learning/
+
+@author: Arnau Tallaví Borrull
+'''
+
 import bs4
 import urllib2
 
@@ -5,7 +12,7 @@ import urllib2
 class Client(object):
 
     def get_html(self, web_url):
-        try :
+        try:
             f = urllib2.urlopen(web_url)
         except urllib2.URLError as e:
             print(e)
@@ -14,12 +21,12 @@ class Client(object):
             html = f.read()
             f.close
         except IOError as e:
-            print (e)
+            print(e)
             exit(0)
         return html
 
     def get_name(self, html):
-        bs = bs4.BeautifulSoup(html,"html.parser")
+        bs = bs4.BeautifulSoup(html, "html.parser")
         name = bs.find("div", class_="dotd-title").text
         if name is None:
             return "No book available"
@@ -32,16 +39,14 @@ class Client(object):
         if description is None:
             return "No description available"
         else:
-            return description.replace("\t", "").replace("\n","")
-
+            return description.replace("\t", "").replace("\n", "")
 
     def main(self):
 
         html = self.get_html('https://www.packtpub.com/packt/offers/free-learning/')
         name = self.get_name(html)
         description = self.get_description(html)
-        print ("Today's book in packtpub is: " + name + "\nDescription: " + description)
-
+        print("Today's book in packtpub is: " + name + "\nDescription: " + description)
 
 
 if __name__ == "__main__":
